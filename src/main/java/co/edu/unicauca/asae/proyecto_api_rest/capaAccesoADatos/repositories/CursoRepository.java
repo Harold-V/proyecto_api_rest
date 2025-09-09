@@ -19,6 +19,14 @@ public class CursoRepository {
         cargarCursos();
     }
 
+    public Optional<CursoEntity> findById(Long id) {
+        return Optional.ofNullable(mapaCursos.get(id));
+    }
+
+    public Optional<Collection<CursoEntity>> findAll() {
+        return mapaCursos.isEmpty() ? Optional.empty() : Optional.of(mapaCursos.values());
+    }
+
     private void cargarCursos() {
         System.out.println("Cargando cursos iniciales...");
 

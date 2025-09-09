@@ -19,6 +19,14 @@ public class EspacioFisicoRepository {
         cargarEspacios();
     }
 
+    public Optional<EspacioFisicoEntity> findById(Long id) {
+        return Optional.ofNullable(mapaEspacios.get(id));
+    }
+
+    public Optional<Collection<EspacioFisicoEntity>> findAll() {
+        return mapaEspacios.isEmpty() ? Optional.empty() : Optional.of(mapaEspacios.values());
+    }
+
     private void cargarEspacios() {
         System.out.println("Cargando espacios físicos iniciales...");
         mapaEspacios.put(1L, new EspacioFisicoEntity(1L, "Aula 101", TipoEspacioFisico.AULA, true));

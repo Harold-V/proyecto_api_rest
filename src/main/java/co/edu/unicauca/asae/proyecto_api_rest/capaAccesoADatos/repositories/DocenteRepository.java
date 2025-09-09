@@ -2,6 +2,7 @@ package co.edu.unicauca.asae.proyecto_api_rest.capaAccesoADatos.repositories;
 
 import java.util.*;
 import org.springframework.stereotype.Repository;
+
 import co.edu.unicauca.asae.proyecto_api_rest.capaAccesoADatos.models.DocenteEntity;
 
 /**
@@ -15,6 +16,15 @@ public class DocenteRepository {
 
     public DocenteRepository() {
         cargarDocentes();
+    }
+
+    public Optional<DocenteEntity> findById(Long id) {
+        return Optional.ofNullable(mapaDocentes.get(id));
+    }
+
+    // y/o:
+    public Optional<Collection<DocenteEntity>> findAll() {
+        return mapaDocentes.isEmpty() ? Optional.empty() : Optional.of(mapaDocentes.values());
     }
 
     private void cargarDocentes() {
