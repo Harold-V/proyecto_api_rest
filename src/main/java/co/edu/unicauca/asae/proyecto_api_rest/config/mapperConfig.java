@@ -29,7 +29,6 @@ public class mapperConfig {
 
         ModelMapper mm = new ModelMapper();
 
-        // --- DTO -> Entity (resolver IDs) ---
         Converter<Long, CursoEntity> cursoConv = ctx -> {
             Long id = ctx.getSource();
             if (id == null)
@@ -64,6 +63,21 @@ public class mapperConfig {
             m.using(cursoConv).map(FranjaHorariaDTO::getCursoId, FranjaHorariaEntity::setCurso);
             m.using(espacioConv).map(FranjaHorariaDTO::getEspacioFisicoId, FranjaHorariaEntity::setEspacioFisico);
             m.using(docentesConv).map(FranjaHorariaDTO::getDocentesIds, FranjaHorariaEntity::setDocentes);
+        });
+
+        Converter<CursoEntity, Long> cursoToId = ctx -> ctx.getSource() == null ? null : ctx.getSource().getId();
+        Converter<EspacioFisicoEntity, Long> espacioToId = ctx -> ctx.getSource() == null ? null
+                : ctx.getSource().getId();
+        Converter<List<DocenteEntity>, List<Long>> docentesToIds = ctx -> ctx.getSource() == null ? List.of()
+                : ctx.getSource().stream().map(DocenteEntity::getId).collect(Collectors.toList());
+
+        TypeMap<FranjaHorariaEntity, FranjaHorariaDTO> entityToDto = mm.createTypeMap(FranjaHorariaEntity.class,
+                FranjaHorariaDTO.class);
+
+        entityToDto.addMappings(m -> {
+            m.using(cursoToId).map(FranjaHorariaEntity::getCurso, FranjaHorariaDTO::setCursoId);
+            m.using(espacioToId).map(FranjaHorariaEntity::getEspacioFisico, FranjaHorariaDTO::setEspacioFisicoId);
+            m.using(docentesToIds).map(FranjaHorariaEntity::getDocentes, FranjaHorariaDTO::setDocentesIds);
         });
 
         return mm;

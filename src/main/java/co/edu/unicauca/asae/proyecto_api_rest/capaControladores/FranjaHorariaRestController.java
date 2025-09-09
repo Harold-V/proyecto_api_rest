@@ -1,8 +1,10 @@
-// src/main/java/.../capaControladores/FranjaHorariaRestController.java
 package co.edu.unicauca.asae.proyecto_api_rest.capaControladores;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,36 +19,45 @@ import lombok.RequiredArgsConstructor;
 public class FranjaHorariaRestController {
 
     private final IFranjaHorariaService franjaService;
+    private final ModelMapper mapper;
 
-    // POST /api/franjas -> crear
+    // POST /api/franjas -> crear (201 Created + Location) y responder DTO
     @PostMapping("/franjas")
-    public ResponseEntity<FranjaHorariaEntity> crear(@RequestBody FranjaHorariaDTO dto) {
-        return ResponseEntity.ok(franjaService.crear(dto));
+    public ResponseEntity<FranjaHorariaDTO> crear(@RequestBody FranjaHorariaDTO dto) {
+        FranjaHorariaEntity creada = franjaService.crear(dto);
+        FranjaHorariaDTO body = mapper.map(creada, FranjaHorariaDTO.class);
+        URI location = URI.create("/api/franjas/" + creada.getId());
+        return ResponseEntity.created(location).body(body);
     }
 
-    // GET /api/franjas/{id} -> consultar por @PathVariable
+    // GET /api/franjas/{id} -> devuelve DTO
     @GetMapping("/franjas/{id}")
-    public ResponseEntity<FranjaHorariaEntity> consultar(@PathVariable Long id) {
-        return ResponseEntity.ok(franjaService.consultar(id));
+    public ResponseEntity<FranjaHorariaDTO> consultar(@PathVariable Long id) {
+        FranjaHorariaEntity e = franjaService.consultar(id);
+        return ResponseEntity.ok(mapper.map(e, FranjaHorariaDTO.class));
     }
 
-    // PUT /api/franjas/{id} -> actualizar
+    // PUT /api/franjas/{id} -> actualiza y devuelve DTO
     @PutMapping("/franjas/{id}")
-    public ResponseEntity<FranjaHorariaEntity> actualizar(@PathVariable Long id,
+    public ResponseEntity<FranjaHorariaDTO> actualizar(@PathVariable Long id,
             @RequestBody FranjaHorariaDTO dto) {
-        return ResponseEntity.ok(franjaService.actualizar(id, dto));
+        FranjaHorariaEntity e = franjaService.actualizar(id, dto);
+        return ResponseEntity.ok(mapper.map(e, FranjaHorariaDTO.class));
     }
 
-    // DELETE /api/franjas?id=... -> eliminar por @RequestParam
-    @DeleteMapping("/franjas")
-    public ResponseEntity<Void> eliminar(@RequestParam("id") Long id) {
+    // DELETE /api/franjas/{id} -> 204/noContent o 404
+    @DeleteMapping("/franjas/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         boolean ok = franjaService.eliminar(id);
         return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // GET /api/cursos/{cursoId}/franjas -> listar por curso
+    // GET /api/cursos/{cursoId}/franjas -> lista DTOs
     @GetMapping("/cursos/{cursoId}/franjas")
-    public ResponseEntity<List<FranjaHorariaEntity>> listarPorCurso(@PathVariable Long cursoId) {
-        return ResponseEntity.ok(franjaService.listarPorCurso(cursoId));
+    public ResponseEntity<List<FranjaHorariaDTO>> listarPorCurso(@PathVariable Long cursoId) {
+        List<FranjaHorariaDTO> lista = franjaService.listarPorCurso(cursoId).stream()
+                .map(e -> mapper.map(e, FranjaHorariaDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
     }
 }
