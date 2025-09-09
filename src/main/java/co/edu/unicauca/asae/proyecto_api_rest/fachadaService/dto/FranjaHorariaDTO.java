@@ -7,14 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO de entrada para crear/actualizar franjas.
- * Horas en formato "HH:mm" 24h (ej: "08:00", "14:30").
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FranjaHorariaDTOPeticion {
+public class FranjaHorariaDTO {
     private DiaSemana dia;
     private String horaInicio; // "HH:mm"
     private String horaFin; // "HH:mm"
