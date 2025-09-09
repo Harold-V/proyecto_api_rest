@@ -19,8 +19,6 @@ public class FranjaHorariaRepository {
     private final AtomicLong secuencia = new AtomicLong(0L);
     private static final DateTimeFormatter F = DateTimeFormatter.ofPattern("HH:mm");
 
-    // --- CRUD básico ---
-
     public Optional<Collection<FranjaHorariaEntity>> findAll() {
         return mapaFranjas.isEmpty() ? Optional.empty() : Optional.of(mapaFranjas.values());
     }
@@ -48,8 +46,6 @@ public class FranjaHorariaRepository {
         return mapaFranjas.remove(id) != null;
     }
 
-    // --- Consultas de negocio ---
-
     public List<FranjaHorariaEntity> findAllByCursoId(Long cursoId) {
         return mapaFranjas.values().stream()
                 .filter(f -> f.getCurso() != null && Objects.equals(f.getCurso().getId(), cursoId))
@@ -59,7 +55,6 @@ public class FranjaHorariaRepository {
                 .collect(Collectors.toList());
     }
 
-    /** ¿Hay solape en un ESPACIO para el día/rango dados? */
     public boolean existeSolapeEnEspacio(Long espacioId, DiaSemana dia,
             String nuevoInicio, String nuevoFin,
             Long excluirFranjaId) {
@@ -83,7 +78,6 @@ public class FranjaHorariaRepository {
         return false;
     }
 
-    /** ¿Hay solape para ALGÚN docente del conjunto dado? */
     public boolean existeSolapeParaAlgunDocente(Set<Long> docenteIds, DiaSemana dia,
             String nuevoInicio, String nuevoFin,
             Long excluirFranjaId) {
@@ -115,7 +109,6 @@ public class FranjaHorariaRepository {
         return false;
     }
 
-    // Tratamos el fin como EXCLUSIVO [inicio, fin)
     private boolean solapan(LocalTime nIni, LocalTime nFin, LocalTime eIni, LocalTime eFin) {
         return nIni.isBefore(eFin) && nFin.isAfter(eIni);
     }

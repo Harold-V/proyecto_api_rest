@@ -5,10 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import co.edu.unicauca.asae.proyecto_api_rest.capaAccesoADatos.models.DocenteEntity;
 
-/**
- * @class DocenteRepository
- * @brief Repositorio en memoria para DocenteEntity.
- */
 @Repository("IDDocenteRepository")
 public class DocenteRepository {
 
@@ -22,7 +18,6 @@ public class DocenteRepository {
         return Optional.ofNullable(mapaDocentes.get(id));
     }
 
-    // y/o:
     public Optional<Collection<DocenteEntity>> findAll() {
         return mapaDocentes.isEmpty() ? Optional.empty() : Optional.of(mapaDocentes.values());
     }
