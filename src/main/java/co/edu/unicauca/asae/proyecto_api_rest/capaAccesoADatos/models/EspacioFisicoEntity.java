@@ -1,5 +1,6 @@
 package co.edu.unicauca.asae.proyecto_api_rest.capaAccesoADatos.models;
 
+import co.edu.unicauca.asae.proyecto_api_rest.capaAccesoADatos.enums.TipoEspacioFisico;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,9 +8,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class DocenteEntity {
+public class EspacioFisicoEntity {
     private Long id;
     private String nombre;
-    private String apellido;
-    private String correo;
+    private TipoEspacioFisico tipoEspacio;
+    private boolean disponible;
 }

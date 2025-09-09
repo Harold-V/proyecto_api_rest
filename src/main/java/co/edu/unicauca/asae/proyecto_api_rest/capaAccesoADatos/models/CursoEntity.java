@@ -7,9 +7,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class DocenteEntity {
+public class CursoEntity {
     private Long id;
+    private String codigo;
     private String nombre;
-    private String apellido;
-    private String correo;
+    private String grupo;
+    private AsignaturaEntity asignatura;
 }
