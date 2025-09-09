@@ -17,5 +17,4 @@ public class FranjaHorariaDTO {
     private Long cursoId;
     private Long espacioFisicoId;
     private List<Long> docentesIds;
-    private String observaciones;
 }
